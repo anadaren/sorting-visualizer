@@ -1,0 +1,25 @@
+body {
+   font-family: 'Courier New', Courier, monospace;
+   background-color: black;
+}
+
+.top-container {
+    background-color: rgb(45, 45, 45);
+}
+
+.top-container h1 {
+    text-align: left;
+    margin: 0;
+    font-size: 2rem;
+}
+.array-container {
+    display: flex;
+    align-items: flex-end;
+    padding-top: 50px;
+}
+
+.array-bar {
+    width: 10px;
+    display: inline-block;
+    margin: 0 1px;
+}
