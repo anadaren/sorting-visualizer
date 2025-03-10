@@ -1,7 +1,8 @@
 export function quickSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return animations;
-    quickSortHelper(array, 0, array.length-1, animations);
+    const auxiliaryArray = array.slice();
+    quickSortHelper(auxiliaryArray, 0, auxiliaryArray.length-1, animations);
     return animations;
 }
 
@@ -16,24 +17,25 @@ function quickSortHelper(array, low, high, animations) {
 function partition(array, low, high, animations) {
     let pivotValue = array[high];
     let pivotIdx = low;
+
+    animations.push(["pivot", high]); // Set pivot color
     
     for (let i = low; i < high; i++) {
-        animations.push([i, high]);
-        animations.push([i, high]);
+        animations.push(["compare", i, high]); // Animation for changing color
+        animations.push(["revert", i, high]); // Revert color
+        
         // If current element is smaller than the pivot, move to left
         if (array[i] < pivotValue) {
-            animations.push([i, array[pivotIdx]]);
-            animations.push([pivotIdx, array[i]]);
+            animations.push(["swap", i, array[pivotIdx]]);  // Animations for changing height
+            animations.push(["swap", pivotIdx, array[i]]);
             [array[i], array[pivotIdx]] = [array[pivotIdx], array[i]];
             pivotIdx++;
         }
-        else {
-            animations.push([0, 0]);
-            animations.push([0, 0]);
-        }
     }
-    animations.push([pivotIdx, array[high]]);
-    animations.push([high, array[pivotIdx]]);
+    animations.push(["swap", pivotIdx, array[high]]);
+    animations.push(["swap", high, array[pivotIdx]]);
     [array[pivotIdx], array[high]] = [array[high], array[pivotIdx]];
+
+    animations.push(["resetPivot", pivotIdx]);  // Revert pivot color
     return pivotIdx;
 }
