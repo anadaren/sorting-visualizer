@@ -24,22 +24,16 @@ function partition(array, low, high, animations) {
         if (array[i] < pivotValue) {
             animations.push([i, array[pivotIdx]]);
             animations.push([pivotIdx, array[i]]);
-            swap(array, pivotIdx, i);
+            [array[i], array[pivotIdx]] = [array[pivotIdx], array[i]];
             pivotIdx++;
         }
         else {
-            animations.push([-1, -1]);
-            animations.push([-1, -1]);
+            animations.push([0, 0]);
+            animations.push([0, 0]);
         }
     }
     animations.push([pivotIdx, array[high]]);
     animations.push([high, array[pivotIdx]]);
-    swap(array, pivotIdx, high);
+    [array[pivotIdx], array[high]] = [array[high], array[pivotIdx]];
     return pivotIdx;
-}
-
-function swap(array, i, j) {
-    let temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
 }
