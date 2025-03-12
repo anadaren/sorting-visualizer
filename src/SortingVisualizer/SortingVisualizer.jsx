@@ -17,6 +17,9 @@ const PRIMARY_COLOR = 'turquoise';
 // This is the color of array bars that are being compared throughout the animations
 const SECONDARY_COLOR = 'red';
 
+// Color of pivot bar in sorts that require pivots
+const PIVOT_COLOR = 'green';
+
 export default class SortingVisualizer extends React.Component {
   constructor(props) {
     super(props);
@@ -82,6 +85,7 @@ export default class SortingVisualizer extends React.Component {
       }
     }
   }
+
   quickSort() {
     const animations = quickSortAnimations(this.state.array);
     const arrayBars = document.getElementsByClassName('array-bar');
@@ -95,21 +99,21 @@ export default class SortingVisualizer extends React.Component {
               // Highlight the pivot bar in green
               const [_, pivotIdx] = animation;
               if (pivotIdx >= 0 && pivotIdx < arrayBars.length) {
-                  arrayBars[pivotIdx].style.backgroundColor = "green";
+                  arrayBars[pivotIdx].style.backgroundColor = PIVOT_COLOR;
               }
           } else if (animation[0] === "compare") {
               // Compare two bars (red highlight)
               const [_, barOneIdx, barTwoIdx] = animation;
               if (barOneIdx >= 0 && barTwoIdx >= 0) {
-                  arrayBars[barOneIdx].style.backgroundColor = "red";
-                  arrayBars[barTwoIdx].style.backgroundColor = "red";
+                  arrayBars[barOneIdx].style.backgroundColor = SECONDARY_COLOR;
+                  arrayBars[barTwoIdx].style.backgroundColor = SECONDARY_COLOR;
               }
           } else if (animation[0] === "revert") {
               // Revert compared bars to normal
               const [_, barOneIdx, barTwoIdx] = animation;
               if (barOneIdx >= 0 && barTwoIdx >= 0) {
-                  arrayBars[barOneIdx].style.backgroundColor = "turquoise";
-                  arrayBars[barTwoIdx].style.backgroundColor = "turquoise";
+                  arrayBars[barOneIdx].style.backgroundColor = PRIMARY_COLOR;
+                  arrayBars[barTwoIdx].style.backgroundColor = PRIMARY_COLOR;
               }
           } else if (animation[0] === "swap") {
               // Swap heights
@@ -121,41 +125,62 @@ export default class SortingVisualizer extends React.Component {
               // Reset pivot bar color after partitioning
               const [_, pivotIdx] = animation;
               if (pivotIdx >= 0 && pivotIdx < arrayBars.length) {
-                  arrayBars[pivotIdx].style.backgroundColor = "turquoise";
+                  arrayBars[pivotIdx].style.backgroundColor = PRIMARY_COLOR;
               }
           }
       }, i * ANIMATION_SPEED_MS);
+    }
   }
-}
 
 
   heapSort() {
     // Animates heap sort
     const animations = heapSortAnimations(this.state.array);
+    const arrayBars = document.getElementsByClassName('array-bar');
+
     for (let i = 0; i < animations.length; i++) {
-        const arrayBars = document.getElementsByClassName('array-bar');
+      setTimeout(() => {
+          const animation = animations[i];
+          if (animation[0] === "compare") {
+            // Compare two bars (red highlight)
+            const [_, barOneIdx, barTwoIdx] = animation;
+            if (barOneIdx < arrayBars.length && barTwoIdx < arrayBars.length) {
+            arrayBars[barOneIdx].style.backgroundColor = SECONDARY_COLOR;
+            arrayBars[barTwoIdx].style.backgroundColor = SECONDARY_COLOR;
+            }
+          } else if (animation[0] === "revert") {
+            // Revert compared bars to normal
+            const [_, barOneIdx, barTwoIdx] = animation;
+            if (barOneIdx < arrayBars.length && barTwoIdx < arrayBars.length) {
+            arrayBars[barOneIdx].style.backgroundColor = PRIMARY_COLOR;
+            arrayBars[barTwoIdx].style.backgroundColor = PRIMARY_COLOR;
+            }
+          } else if (animation[0] === "swap") {
+            // Swap heights
+            const [_, barOneIdx, newHeightOne, barTwoIdx, newHeightTwo] = animation;
+            if (barOneIdx < arrayBars.length && barTwoIdx < arrayBars.length) {
+            arrayBars[barOneIdx].style.height = `${newHeightOne * 5}px`;
+            arrayBars[barTwoIdx].style.height = `${newHeightTwo * 5}px`;
 
-        const isColorChange = i % 4 < 2;
-        if (isColorChange) {  // Change colors
-            const [barOneIdx, barTwoIdx] = animations[i];
-            const barOneStyle = arrayBars[barOneIdx].style;
-            const barTwoStyle = arrayBars[barTwoIdx].style;
-            const color = i % 4 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
             setTimeout(() => {
-                barOneStyle.backgroundColor = color;
-                barTwoStyle.backgroundColor = color;
-            }, i * ANIMATION_SPEED_MS);
-        } else {  // Change height
-            setTimeout(() => {
-                const [barOneIdx, newHeight] = animations[i];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                barOneStyle.height = `${newHeight * 5}px`;
-            }, i * ANIMATION_SPEED_MS);
-      }
-
-
+              arrayBars[barOneIdx].style.backgroundColor = PRIMARY_COLOR;
+              arrayBars[barTwoIdx].style.backgroundColor = PRIMARY_COLOR;
+            }, ANIMATION_SPEED_MS);
+            }
+          } else if(animation[0] === "pivot") {
+            // Highlight the pivot bar in green
+            const [_, pivotIdx] = animation;
+            arrayBars[pivotIdx].style.backgroundColor = PIVOT_COLOR;
+          } else if(animation[0] === "resetPivot") {
+            // Reset pivot bar color after partitioning
+            const [_, pivotIdx] = animation;
+            arrayBars[pivotIdx].style.backgroundColor = PRIMARY_COLOR;
+          }
+      }, i * ANIMATION_SPEED_MS);
     }
   }
+  
+
   bubbleSort() {
     // Animates bubble sort
     const animations = bubbleSortAnimations(this.state.array);
@@ -181,22 +206,6 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
-// NOTE: This method will only work if your sorting algorithms actually return
-  // the sorted arrays; if they return the animations (as they currently do), then
-  // this method will be broken.
-  testAlgorithm() {
-    for (let i = 0; i < 100; i++) {
-        const array = [];
-        const length = randomIntFromInterval(1, 1000);
-        for (let i = 0; i < length; i++) {
-          array.push(randomIntFromInterval(-1000, 1000));
-        }
-        const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-        const mergeSortedArray = getMergeSortAnimations(array.slice());
-        console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-      }
-    }
-
   render() {
     const { array } = this.state;
 
@@ -210,7 +219,6 @@ export default class SortingVisualizer extends React.Component {
         <button onClick={() => this.quickSort()}>Quick Sort</button>
         <button onClick={() => this.heapSort()}>Heap Sort</button>
         <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-        <button onClick={() => this.testAlgorithm()}>Test Algorithm (Broken)</button>
       </div>
       <div className="array-container">
         
@@ -230,18 +238,3 @@ export default class SortingVisualizer extends React.Component {
     );
   }
 }
-
-function randomIntFromInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-// Compares arrays
-function arraysAreEqual(arrayOne, arrayTwo) {
-    if (arrayOne.length !== arrayTwo.length) return false;
-    for (let i = 0; i < arrayOne.length; i++) {
-      if (arrayOne[i] !== arrayTwo[i]) {
-        return false;
-      }
-    }
-    return true;
-  }

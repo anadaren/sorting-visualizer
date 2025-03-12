@@ -2,7 +2,9 @@ export function bubbleSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return animations;
     const newArray = array.slice();
+    //console.log(array);   // Unsorted Array (for testing)
     bubbleSort(array, newArray, animations);
+    //console.log(newArray);   // Sorted Array (for testing)
     return animations;
 }
 
@@ -14,7 +16,7 @@ function bubbleSort(array, newArray, animations) {
             animations.push([j, j + 1]);
             animations.push([j, j + 1]);
             if (newArray[j] > newArray[j + 1]) {
-                // Swap the two elements
+                // If one element is bigger, swap the two elements
                 animations.push([j, newArray[j + 1]]);
                 animations.push([j + 1, newArray[j]]);
                 let temp = newArray[j];

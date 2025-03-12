@@ -1,8 +1,10 @@
 export function quickSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return animations;
-    const auxiliaryArray = array.slice();
-    quickSortHelper(auxiliaryArray, 0, auxiliaryArray.length-1, animations);
+    const newArray = array.slice();
+    //console.log(array);   // Unsorted Array (for testing)
+    quickSortHelper(newArray, 0, newArray.length-1, animations);
+    //console.log(array);   // Sorted Array (for testing)
     return animations;
 }
 
@@ -32,7 +34,7 @@ function partition(array, low, high, animations) {
             pivotIdx++;
         }
     }
-    animations.push(["swap", pivotIdx, array[high]]);
+    animations.push(["swap", pivotIdx, array[high]]);   // Animations for changing height
     animations.push(["swap", high, array[pivotIdx]]);
     [array[pivotIdx], array[high]] = [array[high], array[pivotIdx]];
 

@@ -2,7 +2,9 @@ export function mergeSortAnimations(array) {
     const animations = [];
     if (array.length <= 1) return animations;
     const newArray = array.slice();
+    //console.log(array);   // Unsorted Array (for testing)
     mergeSortHelper(array, 0, array.length - 1, newArray, animations);
+    //console.log(array);   // Sorted Array (for testing)
     return animations;
 }
 
