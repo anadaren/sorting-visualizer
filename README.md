@@ -1,12 +1,27 @@
-# React + Vite
+# Sorting Algorithm Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
+An interactive web application that visualizes various sorting algorithms in real-time. Built with React and Vite, this project provides an educational tool to understand how different sorting algorithms work through dynamic animations.
 
-Currently, two official plugins are available:
+<img alt="Sorting Algorithm Visualizer Screenshot" src="https://github.com/user-attachments/assets/82bf2ba9-0e38-459e-b458-cec438d554d2" />
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Version
+<a href="https://anadaren-sorting-visualizer.vercel.app/">Deployed Version</a>
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Visual representation of sorting algorithms
+
+- Responsive design for various devices
+
+- Real-time animation of sorting processes
+
+- User-friendly interface
+
+## Technologies Used
+
+- Frontend: React, Vite
+
+- Styling: Tailwind CSS
+
+- Tooling: ESLint
